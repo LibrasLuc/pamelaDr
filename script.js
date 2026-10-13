@@ -38,7 +38,7 @@ const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 if (!reduce) {
   // Título do hero palavra por palavra (mantém o texto acessível)
-  const h1 = document.querySelector(".hero h1");
+  const h1 = document.querySelector(".stage h1");
   h1.setAttribute("aria-label", h1.textContent.replace(/\s+/g, " ").trim());
   let i = 0;
   const split = (node) => {
@@ -64,7 +64,7 @@ if (!reduce) {
   const bar = document.createElement("div");
   bar.className = "progress"; bar.setAttribute("aria-hidden", "true");
   document.body.prepend(bar);
-  const img = document.querySelector(".hero-photo img");
+  const img = document.querySelector(".stage-photo img");
   const closing = document.querySelector(".closing");
   let ticking = false;
   const frame = () => {
