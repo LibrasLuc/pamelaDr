@@ -93,3 +93,18 @@ if (!reduce) {
     });
   }
 }
+
+// Digitação da primeira mensagem no hero
+const typed = document.querySelector(".typed");
+if (typed && !reduce) {
+  const full = typed.dataset.text;
+  typed.parentElement.setAttribute("aria-label", full);
+  typed.setAttribute("aria-hidden", "true");
+  typed.textContent = "";
+  const chars = [...full];
+  let k = 0;
+  setTimeout(function type() {
+    typed.textContent += chars[k++];
+    if (k < chars.length) setTimeout(type, 38 + Math.random() * 60);
+  }, 1300);
+}

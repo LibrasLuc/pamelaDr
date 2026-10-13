@@ -198,3 +198,62 @@ address { font-style: normal; font-family: var(--serif); font-size: clamp(1.4rem
   .js .step.reveal { border-top-color: #5a4840 !important; background: none !important; }
   .js .step.reveal::before { opacity: 1 !important; transform: none !important; }
 }
+
+/* ---------- Hero autoral v2: "a primeira conversa" ---------- */
+.hero { position: relative; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); grid-template-areas: "photo text"; min-height: calc(100svh - 110px); overflow: hidden; isolation: isolate; }
+.hero-text { grid-area: text; position: relative; z-index: 2; }
+.hero-photo { grid-area: photo; justify-self: start; max-width: 460px; }
+.hero-photo::before { display: none; }
+.hero-photo img { border-radius: 999px 999px 18px 18px; aspect-ratio: 3/4; box-shadow: 0 40px 80px -40px rgba(42,31,27,.5); }
+.hero h1 { font-size: clamp(2.4rem, 5vw, 4.4rem); }
+
+/* Nome gigante em segundo plano, cortado pela foto */
+.hero-name { position: absolute; inset: auto 0 -0.12em 0; margin: 0; z-index: -1; display: flex; flex-direction: column; font: italic 300 clamp(6rem, 19vw, 20rem)/.82 var(--serif); letter-spacing: -.04em; color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--wood) 55%, transparent); pointer-events: none; user-select: none; white-space: nowrap; }
+.hero-name span:last-child { padding-left: 18vw; color: color-mix(in srgb, var(--coral) 9%, transparent); -webkit-text-stroke: 0; }
+
+/* Selo circular girando */
+.seal { position: absolute; width: 150px; height: 150px; right: -48px; top: 28px; font: 600 12.5px var(--sans); letter-spacing: .22em; text-transform: uppercase; fill: var(--ink); background: var(--cream); border-radius: 50%; padding: 6px; animation: spin 28s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Compositor de mensagem */
+.composer { margin-top: 8px; max-width: 460px; background: var(--paper); border: 1px solid var(--line); border-radius: 22px; padding: 18px; box-shadow: 0 24px 50px -36px rgba(42,31,27,.5); }
+.composer-label { margin: 0 0 10px; font-size: .78rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
+.bubble { background: #e7f3e9; color: #1d3b2a; border-radius: 16px 16px 4px 16px; padding: 12px 16px; margin: 0 0 14px auto; width: fit-content; max-width: 100%; min-height: 3em; font-size: 1rem; }
+.caret { display: inline-block; width: 2px; height: 1.05em; background: currentColor; margin-left: 2px; vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.composer .btn { width: 100%; justify-content: center; }
+.hero .link-arrow { display: inline-block; margin-top: 22px; }
+
+/* Faixa em movimento */
+.marquee { overflow: hidden; border-block: 1px solid var(--ink); background: var(--cream); padding: 18px 0; }
+.marquee-track { display: flex; width: max-content; gap: 36px; align-items: center; animation: marquee 40s linear infinite; font: italic 300 clamp(1.4rem, 2.6vw, 2.1rem) var(--serif); white-space: nowrap; }
+.marquee-track i { font-style: normal; color: var(--coral); font-size: .7em; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* Serviços: pergunta para levar */
+.ask { margin-top: 22px !important; padding: 14px 16px; border-left: 2px solid var(--coral); background: color-mix(in srgb, var(--coral) 6%, transparent); font-family: var(--serif); font-style: italic; color: var(--ink) !important; border-radius: 0 10px 10px 0; }
+.ask span { display: block; font: 600 .7rem var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--coral-deep); margin-bottom: 4px; font-style: normal; }
+
+/* Etapas como conversa, sem numeração */
+.step::before { display: none !important; }
+.step-list { grid-template-columns: 1fr; max-width: 720px; gap: 18px; }
+.step, .js .step.reveal { border: 0; background: #3a2c26; border-radius: 22px 22px 22px 6px; padding: 22px 26px; max-width: 520px; }
+.step:nth-child(2) { justify-self: end; background: var(--coral); border-radius: 22px 22px 6px 22px; }
+.step:nth-child(2) p { color: #fde9e4; }
+.step:nth-child(3) { background: #3a2c26; }
+.step h3 { font-size: 1.3rem; margin-bottom: .3em; }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; grid-template-areas: "photo" "text"; padding-bottom: 72px; }
+  .hero-photo { justify-self: center; max-width: 300px; }
+  .seal { width: 112px; height: 112px; right: -30px; top: 10px; }
+  .hero-name { font-size: 28vw; bottom: auto; top: 30px; }
+  .hero-name span:last-child { padding-left: 10vw; }
+  .composer { max-width: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seal, .marquee-track, .caret { animation: none !important; }
+  .marquee-track { width: auto; flex-wrap: wrap; justify-content: center; }
+  .marquee-track > :nth-child(n+11) { display: none; }
+}
