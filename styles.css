@@ -367,11 +367,119 @@ address { font-style: normal; font-family: var(--serif); font-size: clamp(1.4rem
 .js .care-brush.reveal.in { opacity: 1; transform: rotate(-24deg); }
 .care-aside:hover .care-brush { transform: rotate(-16deg) translateY(-6px); }
 @media (max-width: 860px) {
-  .care-aside { display: grid; grid-template-columns: 1fr auto; column-gap: 16px; }
-  .care-aside h2, .care-aside > p { grid-column: 1; }
-  .care-brush { grid-column: 2; grid-row: 1 / span 2; height: 180px; margin: 0 8px 0 0; }
+  .care-aside { display: block; }
+  .care-brush { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .stage-photo.reveal-hero, .stage-photo .bubble { clip-path: none !important; opacity: 1 !important; }
   .js .care-brush.reveal { opacity: 1 !important; transform: rotate(-24deg) !important; }
+}
+
+/* ---------- Ajustes finais para telas pequenas ---------- */
+@media (max-width: 600px) {
+  :root { --gutter: 20px; }
+
+  body { font-size: 1rem; }
+  html { scroll-padding-top: 68px; }
+
+  .preview-bar {
+    padding: 7px 14px;
+    font-size: .72rem;
+    line-height: 1.4;
+  }
+
+  .nav {
+    min-height: 64px;
+    gap: 10px;
+    padding: 10px var(--gutter);
+  }
+  .brand { min-width: 0; }
+  .brand-mark { width: 34px; height: 34px; flex: 0 0 34px; }
+  .brand-name {
+    overflow: hidden;
+    max-width: 11rem;
+    font-size: .95rem;
+    line-height: 1.15;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .nav .btn-sm { min-height: 44px; padding: 10px 16px; }
+
+  .stage-photo {
+    height: min(54svh, 460px);
+    min-height: 320px;
+  }
+  .stage-photo img {
+    height: 108%;
+    object-position: 50% 18%;
+  }
+  .stage-photo .bubble {
+    left: var(--gutter);
+    bottom: var(--gutter);
+    max-width: calc(100% - 40px);
+    padding: 10px 13px;
+    font-size: .88rem;
+    line-height: 1.45;
+  }
+  .stage-text { padding: 32px var(--gutter) 48px; }
+  .stage-kicker { margin-bottom: 22px; font-size: .7rem; line-height: 1.45; }
+  .stage-kicker span { font-size: 1.25rem; }
+  .stage h1 { font-size: clamp(2.25rem, 11.5vw, 3.25rem); line-height: 1.02; }
+  .stage .lead { margin-bottom: 26px; }
+  .stage-cta { align-items: stretch; gap: 16px; }
+  .stage-cta .btn { width: 100%; min-height: 50px; justify-content: center; }
+  .stage-cta .link-arrow { width: fit-content; }
+  .stage-meta { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 34px; }
+
+  .marquee { padding-block: 13px; }
+  .marquee-track { gap: 24px; font-size: 1.25rem; }
+
+  .intro, .care { padding: 72px var(--gutter); }
+  .intro { gap: 36px; }
+  .intro-photo { width: 100%; }
+  .intro h2, .care-aside h2 { font-size: clamp(2rem, 10vw, 2.6rem); }
+  .signature { margin-top: 30px; }
+
+  .care { gap: 38px; }
+  .care-aside { display: block; }
+  .care-brush { display: none; }
+  .care-item summary { gap: 8px 14px; padding: 23px 0; }
+  .care-name { font-size: clamp(1.6rem, 8vw, 2rem); }
+  .care-hint { font-size: .7rem; line-height: 1.4; }
+  .care-body { padding-bottom: 26px; }
+
+  .path { padding: 76px var(--gutter); }
+  .path-sentence { font-size: clamp(1.65rem, 8vw, 2.2rem); line-height: 1.3; margin-bottom: 32px; }
+
+  .place { padding: 48px var(--gutter) 64px; }
+  .place-map { aspect-ratio: 1 / 1; }
+  .place-card { margin: -36px 10px 0; padding: 22px 20px; }
+  .place-card address { font-size: 1.2rem; margin-bottom: 20px; }
+  .place-actions { align-items: stretch; gap: 18px; }
+  .place-actions .btn { width: 100%; min-height: 50px; justify-content: center; }
+  .place-actions .link-arrow { width: fit-content; }
+
+  .closing { padding: 76px var(--gutter); }
+  .closing h2 { font-size: clamp(2.2rem, 11vw, 3rem); }
+  .closing .btn { width: 100%; min-height: 50px; justify-content: center; }
+
+  .footer {
+    display: grid;
+    gap: 12px;
+    padding: 28px var(--gutter) 104px;
+    line-height: 1.5;
+  }
+  .float-whats { right: 14px; bottom: 14px; width: 54px; height: 54px; }
+}
+
+@media (max-width: 360px) {
+  :root { --gutter: 16px; }
+  .brand-name { max-width: 8.25rem; }
+  .nav .btn-sm { padding-inline: 13px; }
+  .stage-photo { min-height: 290px; }
+  .stage-photo .bubble { max-width: calc(100% - 32px); }
+}
+
+@media (max-height: 560px) and (max-width: 860px) {
+  .stage-photo { height: 72svh; min-height: 260px; }
 }
