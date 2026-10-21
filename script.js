@@ -66,8 +66,7 @@ if (!reduce && window.gsap && window.ScrollTrigger) {
 
   // Entrada do hero
   gsap.from(".hero-in", { y: 30, opacity: 0, duration: 1.2, ease: "power3.out", stagger: 0.12, delay: 0.6 });
-  gsap.from(".hero .arch", { clipPath: "inset(100% 0% 0% 0% round 999px 999px 28px 28px)", duration: 1.6, ease: "expo.inOut", delay: 0.3 });
-  gsap.from(".hero .arch img", { scale: 1.35, duration: 2.2, ease: "expo.out", delay: 0.3 });
+  gsap.from(".halo", { scale: 0.6, opacity: 0, duration: 2, ease: "expo.out", delay: 0.3 });
   gsap.from(".smile-line path", { strokeDashoffset: 320, duration: 1.4, ease: "power2.inOut", delay: 1.4 });
   gsap.from(".hero-ghost", { xPercent: -8, opacity: 0, duration: 2.4, ease: "expo.out" });
 

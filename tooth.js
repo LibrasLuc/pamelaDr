@@ -19,9 +19,9 @@ if (!canvas || reduce || !hasWebGL() || !window.gsap) root.classList.add("no-3d"
 // fora do caminho crítico: não segura o primeiro render
 else setTimeout(init, 0);
 
-// Molar procedural: esfera deformada em coroa com 4 cúspides e duas raízes
-function toothGeometry() {
-  let g = new THREE.SphereGeometry(1, 180, 140);
+// Molar procedural: coroa com 4 cúspides + duas raízes (mesial e distal)
+function crownGeometry() {
+  let g = new THREE.SphereGeometry(1, 160, 120);
   g.deleteAttribute("normal");
   g.deleteAttribute("uv");
   g = mergeVertices(g);
@@ -38,34 +38,58 @@ function toothGeometry() {
     const k = 0.82 + 0.18 * sq;
     if (y >= 0) {
       const rr = Math.pow(r, 0.55); // achata o topo
-      x = (x / r) * rr * k * 1.06;
-      z = (z / r) * rr * k * 0.94;
+      x = (x / r) * rr * k * 1.0;
+      z = (z / r) * rr * k * 0.9;
       let bump = 0;
       for (const [cx, cz] of cusps) bump += Math.exp(-((x - cx) ** 2 + (z - cz) ** 2) / 0.1);
       const groove = Math.exp(-(x * x) / 0.01) * 0.7 + Math.exp(-(z * z) / 0.014) * 0.35;
-      const top = y * y;
-      y = 0.32 + 0.5 * y + top * (0.3 * bump - 0.16 * groove);
+      y = 0.32 + 0.5 * y + y * y * (0.3 * bump - 0.16 * groove);
     } else {
-      const t = -y; // 0 no colo, 1 no ápice
-      const prof = 0.96 * Math.pow(1 - t, 0.7) + 0.02;
-      const neck = 1 - 0.16 * Math.sin(Math.min(t * 3.4, Math.PI));
-      const sep = 0.42 * Math.pow(t, 0.8);
-      const side = Math.tanh((x / r) * 3.2);
-      const split = t > 0.12 ? 1 : t / 0.12;
-      const w = prof * neck * (1 - 0.45 * split * Math.pow(t, 0.4));
-      x = (x / r) * w * k * 1.06 + side * sep * split + 0.12 * t * t;
-      z = (z / r) * w * k * 0.92;
-      // furca: entre as raízes o contorno sobe, separando-as
-      const fork = 0.32 + 0.68 * Math.pow(Math.abs(side), 0.6);
-      const len = t < 0.15 ? 1 : 1 - (1 - fork) * Math.min(1, (t - 0.15) / 0.3);
-      y = 0.32 - 2.3 * Math.pow(t, 0.92) * len;
+      // colo: estreita suavemente e fecha por dentro das raízes
+      const t = -y;
+      x *= (1 - 0.42 * t) * k * 1.0;
+      z *= (1 - 0.42 * t) * k * 0.9;
+      y = 0.32 - 0.62 * t;
     }
     p.setXYZ(i, x, y, z);
   }
   g.computeVertexNormals();
-  g.center();
-  g.scale(0.62, 0.62, 0.62);
   return g;
+}
+
+// Raiz cônica com ápice arredondado e leve curvatura distal
+function rootGeometry(len, side) {
+  const pts = [];
+  const N = 48;
+  for (let i = 0; i <= N; i++) {
+    const u = i / N;
+    const r = 0.48 * Math.sqrt(1 - Math.pow(u, 2.4)) * (1 - 0.6 * u);
+    pts.push(new THREE.Vector2(Math.max(r, 0.0001), -u * len));
+  }
+  const g = new THREE.LatheGeometry(pts, 56);
+  const p = g.attributes.position;
+  for (let i = 0; i < p.count; i++) {
+    const u = -p.getY(i) / len;
+    // raízes de molar: estreitas no sentido mesio-distal, largas no vestíbulo-lingual
+    const x = p.getX(i) * 0.7 + side * (0.32 + 0.16 * u) + 0.2 * u * u;
+    p.setXYZ(i, x, p.getY(i) - 0.05, p.getZ(i) * 1.02);
+  }
+  g.computeVertexNormals();
+  return g;
+}
+
+function buildTooth(material) {
+  const group = new THREE.Group();
+  group.add(
+    new THREE.Mesh(crownGeometry(), material),
+    new THREE.Mesh(rootGeometry(1.75, -1), material),
+    new THREE.Mesh(rootGeometry(1.6, 1), material)
+  );
+  const box = new THREE.Box3().setFromObject(group);
+  const c = box.getCenter(new THREE.Vector3());
+  group.children.forEach((m) => m.position.sub(c));
+  group.scale.setScalar(0.62);
+  return group;
 }
 
 function init() {
@@ -94,9 +118,8 @@ function init() {
     sheenRoughness: 0.4,
     ior: 1.55,
     specularIntensity: 0.9,
-    transparent: true,
   });
-  const tooth = new THREE.Mesh(toothGeometry(), material);
+  const tooth = buildTooth(material);
   const pivot = new THREE.Group();
   pivot.add(tooth);
   scene.add(pivot);
@@ -117,7 +140,7 @@ function init() {
 
   // Coreografia por seção: desktop / mobile
   const D = {
-    hero:       { x: 0.12,  y: -0.28, s: 1,    rx: 0.25, ry: 0.5,  rz: -0.25, op: 1 },
+    hero:       { x: 0.5,   y: -0.04, s: 1.3,  rx: 0.2,  ry: 0.5,  rz: -0.18, op: 1 },
     about:      { x: 0.8,   y: 0.12,  s: 0.7,  rx: -0.2, ry: 2.6,  rz: 0.2,   op: 1 },
     care:       { x: -0.66, y: -0.42, s: 0.72, rx: 0.3,  ry: 4.6,  rz: -0.1,  op: 1 },
     experience: { x: 0,     y: 0.08,  s: 1.3,  rx: 0.15, ry: 7,    rz: 0,     op: 0.92 },
@@ -126,7 +149,7 @@ function init() {
     contact:    { x: 0,     y: 0.42,  s: 0.85, rx: 0.2,  ry: 12.6, rz: 0,     op: 1 },
   };
   const M = {
-    hero:       { x: 0.42,  y: -0.32, s: 0.62, rx: 0.25, ry: 0.5, rz: -0.3, op: 1 },
+    hero:       { x: 0,     y: -0.62, s: 0.62, rx: 0.2,  ry: 0.5, rz: -0.18, op: 1 },
     about:      { x: 0.7,   y: 0.7,   s: 0.3,  rx: 0,    ry: 3,   rz: 0,    op: 0 },
     experience: { x: 0,     y: 0.5,   s: 0.5,  rx: 0.1,  ry: 7,   rz: 0,    op: 0.9 },
     team:       { x: 0.8,   y: 0.8,   s: 0.3,  rx: 0,    ry: 9,   rz: 0,    op: 0 },
@@ -204,6 +227,7 @@ function init() {
 
     const op = state.op * intro.k;
     canvas.style.visibility = op < 0.01 ? "hidden" : "visible";
+    canvas.style.opacity = op.toFixed(3);
     if (op >= 0.01) {
       const halfW = halfH * camera.aspect;
       const k = intro.k;
@@ -220,7 +244,6 @@ function init() {
       );
       // brilho de porcelana que acompanha o cursor
       glint.position.set(pointer.x * 4, -pointer.y * 3 + 1, 4);
-      material.opacity = op;
       renderer.render(scene, camera);
     }
     requestAnimationFrame(frame);
