@@ -45,33 +45,38 @@ function sdRoundCone(px, py, pz, a, b, r1, r2) {
   return (Math.sqrt(x2 * a2 * il2) + y * rr) * il2 - r1;
 }
 
-const CUSPS = [[-0.3, 0.2], [0.3, 0.2], [-0.3, -0.2], [0.3, -0.2]];
+// Molar superior: coroa bojuda com 4 cúspides e sulcos em cruz,
+// colo estreito e três raízes longas (duas vestibulares e uma palatina).
+const CUSPS = [[-0.36, 0.32], [0.36, 0.32], [-0.36, -0.3], [0.36, -0.3]];
 const ROOTS = [
-  { a: [-0.34, -0.05, 0.14], b: [-0.5, -1.18, 0.2], r1: 0.3, r2: 0.13 },
-  { a: [0.34, -0.05, 0.14], b: [0.48, -1.12, 0.22], r1: 0.3, r2: 0.13 },
-  { a: [0, -0.05, -0.22], b: [0.04, -1.0, -0.38], r1: 0.27, r2: 0.12 },
+  { a: [-0.3, 0.05, 0.24], b: [-0.64, -1.2, 0.36], r1: 0.36, r2: 0.17 }, // mesiovestibular
+  { a: [0.3, 0.05, 0.24], b: [0.6, -1.14, 0.34], r1: 0.34, r2: 0.17 },   // distovestibular
+  { a: [0, 0.05, -0.28], b: [0.04, -1.12, -0.7], r1: 0.37, r2: 0.18 },     // palatina
 ];
 
 function toothSDF(x, y, z) {
-  // coroa: bloco arredondado, mais largo que o colo
-  let d = sdRoundBox(x, y - 0.42, z, 0.66, 0.38, 0.54, 0.42);
-  // cúspides suaves no topo
-  for (const [cx, cz] of CUSPS) d = smin(d, len3(x - cx, y - 0.6, z - cz) - 0.3, 0.22);
-  // fossa central e sulcos entre cúspides
-  d = smax(d, -(len3(x, y - 1.06, z) - 0.3), 0.14);
-  d = smax(d, -(Math.hypot(x, y - 0.98) - 0.12), 0.1);
-  // colo: estreitamento cervical
-  d = smin(d, sdRoundCone(x, y, z, [0, 0.2, 0], [0, -0.2, 0], 0.56, 0.5), 0.3);
+  // coroa: volume arredondado, mais largo no terço médio
+  let d = sdRoundBox(x, y - 0.52, z, 0.8, 0.44, 0.76, 0.56);
+  for (const [cx, cz] of CUSPS) d = smin(d, len3(x - cx, y - 0.7, z - cz) - 0.36, 0.3);
+  // sulcos oclusais em cruz e fossa central
+  const top = y - 1.1;
+  d = smax(d, -(Math.hypot(z, top) - 0.085), 0.07);
+  d = smax(d, -(Math.hypot(x, top) - 0.085), 0.07);
+  d = smax(d, -(len3(x, top + 0.04, z) - 0.17), 0.08);
+  // sulco vestibular descendo pela face da frente
+  if (y > 0.3) d = smax(d, -(Math.hypot(x, z - 0.84) - 0.07 * Math.min(1, (y - 0.3) / 0.3)), 0.08);
+  // colo: constrição cervical e tronco radicular curto
+  d = smin(d, sdRoundCone(x, y, z, [0, 0.2, 0], [0, 0.02, 0], 0.6, 0.5), 0.2);
   // raízes com leve curvatura distal
   const bx = x - 0.06 * Math.max(-y, 0) ** 2;
-  for (const r of ROOTS) d = smin(d, sdRoundCone(bx, y, z, r.a, r.b, r.r1, r.r2), 0.28);
+  for (const r of ROOTS) d = smin(d, sdRoundCone(bx, y, z, r.a, r.b, r.r1, r.r2), 0.12);
   return d;
 }
 
 function buildTooth(material, res) {
-  const S = 1.42; // domínio [-S, S] em cada eixo
-  const mc = new MarchingCubes(res, material, false, false, 160000);
-  const f = mc.field, n = mc.size, h = mc.halfsize, oy = -0.08;
+  const S = 1.5, oy = -0.1; // domínio [-S, S], deslocado para caber as raízes
+  const mc = new MarchingCubes(res, material, false, false, 320000);
+  const f = mc.field, n = mc.size, h = mc.halfsize;
   for (let k = 0; k < n; k++) {
     const z = ((k - h) / h) * S;
     for (let j = 0; j < n; j++) {
@@ -84,8 +89,9 @@ function buildTooth(material, res) {
   }
   mc.isolation = 0;
   mc.update();
-  mc.scale.setScalar(S * 0.62);
-  mc.position.y = oy * 0.62;
+  const k = 0.55;
+  mc.scale.setScalar(S * k);
+  mc.position.y = (oy + 0.1) * k;
   return mc;
 }
 
@@ -116,7 +122,16 @@ function init() {
     ior: 1.55,
     specularIntensity: 0.9,
   });
-  const tooth = buildTooth(material, isMobile ? 64 : 88);
+  // gradiente: esmalte marfim na coroa, raízes em tom creme
+  material.onBeforeCompile = (sh) => {
+    sh.vertexShader = sh.vertexShader
+      .replace("#include <common>", "#include <common>\nvarying float vToothY;")
+      .replace("#include <begin_vertex>", "#include <begin_vertex>\nvToothY = position.y * 1.5 - 0.1;");
+    sh.fragmentShader = sh.fragmentShader
+      .replace("#include <common>", "#include <common>\nvarying float vToothY;")
+      .replace("#include <color_fragment>", "#include <color_fragment>\ndiffuseColor.rgb *= mix(vec3(0.9, 0.8, 0.62), vec3(1.0), smoothstep(-0.3, 0.3, vToothY));");
+  };
+  const tooth = buildTooth(material, isMobile ? 76 : 112);
   const pivot = new THREE.Group();
   pivot.add(tooth);
   scene.add(pivot);
@@ -137,7 +152,7 @@ function init() {
 
   // Coreografia por seção: desktop / mobile
   const D = {
-    hero:       { x: 0.03,  y: -0.4,  s: 0.72, rx: 0.2,  ry: 0.5,  rz: -0.18, op: 1 },
+    hero:       { x: 0.06,  y: -0.42, s: 0.6,  rx: 0.2,  ry: 0.5,  rz: -0.18, op: 1 },
     about:      { x: 0.8,   y: 0.12,  s: 0.7,  rx: -0.2, ry: 2.6,  rz: 0.2,   op: 1 },
     care:       { x: -0.66, y: -0.42, s: 0.72, rx: 0.3,  ry: 4.6,  rz: -0.1,  op: 1 },
     experience: { x: 0,     y: 0.08,  s: 1.3,  rx: 0.15, ry: 7,    rz: 0,     op: 1 },
