@@ -140,18 +140,21 @@ function init() {
     hero:       { x: 0.03,  y: -0.4,  s: 0.72, rx: 0.2,  ry: 0.5,  rz: -0.18, op: 1 },
     about:      { x: 0.8,   y: 0.12,  s: 0.7,  rx: -0.2, ry: 2.6,  rz: 0.2,   op: 1 },
     care:       { x: -0.66, y: -0.42, s: 0.72, rx: 0.3,  ry: 4.6,  rz: -0.1,  op: 1 },
-    experience: { x: 0,     y: 0.08,  s: 1.3,  rx: 0.15, ry: 7,    rz: 0,     op: 0.92 },
+    experience: { x: 0,     y: 0.08,  s: 1.3,  rx: 0.15, ry: 7,    rz: 0,     op: 1 },
     team:       { x: 0.78,  y: 0.5,   s: 0.45, rx: -0.3, ry: 9,    rz: 0.3,   op: 1 },
     faq:        { x: 0.95,  y: 0.9,   s: 0.3,  rx: 0,    ry: 10,   rz: 0,     op: 0 },
     contact:    { x: 0,     y: 0.42,  s: 0.85, rx: 0.2,  ry: 12.6, rz: 0,     op: 1 },
   };
+  // No celular o dente se ancora em elementos da página: y (e x, se omitido)
+  // vêm do centro do elemento; dy desloca em unidades de viewport (-1..1).
   const M = {
-    hero:       { x: 0.55,  y: -0.2,  s: 0.42, rx: 0.2,  ry: 0.5, rz: -0.18, op: 1 },
-    about:      { x: 0.7,   y: 0.7,   s: 0.3,  rx: 0,    ry: 3,   rz: 0,    op: 0 },
-    care:       { x: -0.7,  y: 0.2,   s: 0.3,  rx: 0,    ry: 5,   rz: 0,    op: 0 },
-    experience: { x: 0,     y: 0.5,   s: 0.5,  rx: 0.1,  ry: 7,   rz: 0,    op: 0.9 },
-    team:       { x: 0.8,   y: 0.8,   s: 0.3,  rx: 0,    ry: 9,   rz: 0,    op: 0 },
-    contact:    { x: 0,     y: 0.7,   s: 0.38, rx: 0.2,  ry: 12.6, rz: 0,   op: 1 },
+    hero:       { x: 0.55,  y: -0.2,  s: 0.42, rx: 0.2, ry: 0.5,  rz: -0.18, op: 1 },
+    about:      { anchor: "#sobre .eyebrow", x: 0.62, dy: 0.07, s: 0.24, rx: 0.1, ry: 3, rz: 0.2, op: 1 },
+    care:       { anchor: "#tratamentos .eyebrow", x: 0.7, s: 0.2, rx: 0, ry: 5, rz: 0, op: 0 },
+    experience: { anchor: ".exp-stage", s: 0.6, rx: 0.15, ry: 7, rz: 0, op: 1 },
+    team:       { anchor: "#equipe .eyebrow", x: 0.62, dy: 0.02, s: 0.24, rx: 0.1, ry: 9, rz: 0.2, op: 1 },
+    faq:        { anchor: "#duvidas h2", x: 0.8, s: 0.2, rx: 0, ry: 10, rz: 0, op: 0 },
+    contact:    { anchor: ".contact-cta .eyebrow", dy: 0.24, s: 0.36, rx: 0.2, ry: 12.6, rz: 0, op: 1 },
   };
 
   let st, tl;
@@ -164,10 +167,25 @@ function init() {
     const max = Math.max(1, document.documentElement.scrollHeight - vh);
     const stops = [{ pos: 0, kf: map.hero }];
     document.querySelectorAll("[data-tooth]").forEach((sec) => {
-      const kf = map[sec.dataset.tooth];
+      let kf = map[sec.dataset.tooth];
       if (!kf) return;
-      const top = sec.getBoundingClientRect().top + scrollY;
-      const pos = Math.min(max, Math.max(0, top - vh * 0.35));
+      let pos;
+      const el = kf.anchor && document.querySelector(kf.anchor);
+      if (el) {
+        // rola até o elemento ficar no centro e converte a posição dele para -1..1
+        const r = el.getBoundingClientRect();
+        const cy = r.top + scrollY + r.height / 2;
+        pos = Math.min(max, Math.max(0, cy - vh * 0.5));
+        const vy = cy - pos;
+        kf = {
+          ...kf,
+          x: kf.x ?? ((r.left + r.width / 2) / innerWidth) * 2 - 1,
+          y: -((vy / vh) * 2 - 1) + (kf.dy || 0),
+        };
+      } else {
+        const top = sec.getBoundingClientRect().top + scrollY;
+        pos = Math.min(max, Math.max(0, top - vh * 0.35));
+      }
       if (pos > stops[stops.length - 1].pos) stops.push({ pos, kf });
     });
     Object.assign(state, map.hero);

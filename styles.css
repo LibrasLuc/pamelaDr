@@ -247,6 +247,19 @@ section { position: relative; }
 .pillars span { font-family: var(--serif); font-size: 2rem; display: block; margin-bottom: 6px; }
 .pillars p { color: rgba(244, 239, 231, .72); margin: 0; max-width: 32ch; }
 @media (min-width: 900px) { .pillars { grid-template-columns: repeat(3, 1fr); gap: 4vw; } }
+/* No celular: seção compacta, com um palco para o dente dentro do arco */
+.exp-stage { display: none; }
+@media (max-width: 899px) {
+  .experience { min-height: 0; gap: 0; padding-top: 96px; }
+  .exp-stage {
+    display: block; position: relative; height: 300px; margin: 8px 0 40px;
+  }
+  .exp-stage::before {
+    content: ""; position: absolute; left: 50%; top: 50%; width: 230px; aspect-ratio: 1; translate: -50% -50%;
+    border-radius: 50%; background: radial-gradient(circle, rgba(255, 255, 255, .14), transparent 68%);
+  }
+  .arc { inset: 22% -30% auto; width: 160%; height: 34%; }
+}
 
 /* Detalhes */
 .details {
