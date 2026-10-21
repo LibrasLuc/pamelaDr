@@ -144,6 +144,7 @@ function init() {
     team:       { x: 0.78,  y: 0.5,   s: 0.45, rx: -0.3, ry: 9,    rz: 0.3,   op: 1 },
     faq:        { x: 0.95,  y: 0.9,   s: 0.3,  rx: 0,    ry: 10,   rz: 0,     op: 0 },
     contact:    { x: 0,     y: 0.42,  s: 0.85, rx: 0.2,  ry: 12.6, rz: 0,     op: 1 },
+    place:      { x: 0,     y: 0.9,   s: 0.5,  rx: 0.2,  ry: 14,   rz: 0,     op: 0 },
   };
   // No celular o dente se ancora em elementos da página: y (e x, se omitido)
   // vêm do centro do elemento; dy desloca em unidades de viewport (-1..1).
@@ -155,6 +156,7 @@ function init() {
     team:       { anchor: "#equipe .eyebrow", x: 0.62, dy: 0.02, s: 0.24, rx: 0.1, ry: 9, rz: 0.2, op: 1 },
     faq:        { anchor: "#duvidas h2", x: 0.8, s: 0.2, rx: 0, ry: 10, rz: 0, op: 0 },
     contact:    { anchor: ".contact-cta .eyebrow", dy: 0.24, s: 0.36, rx: 0.2, ry: 12.6, rz: 0, op: 1 },
+    place:      { x: 0, y: 0.9, s: 0.25, rx: 0.2, ry: 14, rz: 0, op: 0 },
   };
 
   let st, tl;
