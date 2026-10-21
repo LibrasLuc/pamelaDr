@@ -46,12 +46,13 @@ function sdRoundCone(px, py, pz, a, b, r1, r2) {
 }
 
 // Molar superior: coroa bojuda com 4 cúspides e sulcos em cruz,
-// colo estreito e três raízes longas (duas vestibulares e uma palatina).
+// colo estreito e quatro raízes (duas vestibulares e duas palatinas).
 const CUSPS = [[-0.36, 0.32], [0.36, 0.32], [-0.36, -0.3], [0.36, -0.3]];
 const ROOTS = [
   { a: [-0.3, 0.05, 0.24], b: [-0.64, -1.2, 0.36], r1: 0.36, r2: 0.17 }, // mesiovestibular
   { a: [0.3, 0.05, 0.24], b: [0.6, -1.14, 0.34], r1: 0.34, r2: 0.17 },   // distovestibular
-  { a: [0, 0.05, -0.28], b: [0.04, -1.12, -0.7], r1: 0.37, r2: 0.18 },     // palatina
+  { a: [-0.28, 0.05, -0.26], b: [-0.56, -1.1, -0.62], r1: 0.33, r2: 0.16 }, // mesiopalatina
+  { a: [0.28, 0.05, -0.26], b: [0.52, -1.06, -0.6], r1: 0.32, r2: 0.16 },    // distopalatina
 ];
 
 function toothSDF(x, y, z) {
