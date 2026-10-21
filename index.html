@@ -3,36 +3,42 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dentista em Juiz de Fora | Dra. Pâmela Andrade – CRO-MG 44621</title>
-<meta name="description" content="Consultório odontológico da Dra. Pâmela Andrade, dentista em Juiz de Fora (Santa Luzia). Ortodontia, tratamento de canal e estética dental. Agende sua avaliação.">
+<title>Bem-Estar Odontologia | Dentista em Juiz de Fora</title>
+<meta name="description" content="Bem-Estar Odontologia, em Juiz de Fora: implante, protocolo, aparelho, prótese, canal e facetas. Há mais de 10 anos cuidando de sorrisos. Agende pelo WhatsApp.">
 <meta name="robots" content="noindex"><!-- PRÉVIA: remover antes de publicar -->
-<link rel="canonical" href="https://example.com/"><!-- PENDENTE: domínio definitivo -->
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
-<meta property="og:title" content="Dra. Pâmela Andrade – Dentista em Juiz de Fora">
-<meta property="og:description" content="Atenção desde a primeira conversa. Agende sua avaliação no bairro Santa Luzia.">
+<meta property="og:title" content="Bem-Estar Odontologia – Juiz de Fora">
+<meta property="og:description" content="Há mais de 10 anos cuidando de sorrisos. Agende sua avaliação pelo WhatsApp.">
 <meta property="og:image" content="assets/dra-pamela-linktree.jpg">
-<meta name="theme-color" content="#f6efe6">
+<meta name="theme-color" content="#f4efe7">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="modulepreload" href="vendor/three/three.module.min.js">
+<script type="importmap">
+{ "imports": {
+  "three": "./vendor/three/three.module.min.js",
+  "three/addons/": "./vendor/three/addons/"
+} }
+</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Dentist",
-  "name": "Consultório Odontológico Dra. Pâmela Andrade",
+  "name": "Bem-Estar Odontologia",
   "image": "assets/dra-pamela-linktree.jpg",
   "telephone": "+55-32-98402-1717",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "Rua Chácara, 292",
+    "streetAddress": "Rua Chácara, 292 - Santa Luzia",
     "addressLocality": "Juiz de Fora",
     "addressRegion": "MG",
     "addressCountry": "BR"
   },
   "areaServed": "Juiz de Fora",
-  "sameAs": ["https://www.instagram.com/drapamelaandrade/"],
+  "sameAs": ["https://www.instagram.com/bemestarodontologiajf/"],
   "employee": {
     "@type": "Person",
     "name": "Pâmela Andrade",
@@ -45,21 +51,20 @@
 <body>
 <a class="skip" href="#conteudo">Pular para o conteúdo</a>
 
-<div class="preview-bar" role="note">
-  <strong>Prévia</strong> — fotos, serviços e telefone de agendamento aguardam confirmação da Dra. Pâmela.
-</div>
+<canvas class="tooth-canvas" aria-hidden="true"></canvas>
 
-<header class="nav" id="topo">
-  <a class="brand" href="#topo" aria-label="Dra. Pâmela Andrade, início">
-    <span class="brand-mark" aria-hidden="true">PA</span><!-- PENDENTE: substituir pela logo oficial -->
-    <span class="brand-name">Dra. Pâmela Andrade</span>
+<header class="nav">
+  <a class="brand" href="#inicio" aria-label="Bem-Estar Odontologia, início">
+    <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M12 9c-4 0-6 3-6 7 0 5 2 7 3 12 1 4 2 7 4 7s2-4 3-7c.6-2 1.6-3 4-3s3.4 1 4 3c1 3 1 7 3 7s3-3 4-7c1-5 3-7 3-12 0-4-2-7-6-7-3 0-5 2-8 2s-5-2-8-2Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    <span class="brand-name">Bem-Estar <small>Odontologia</small></span>
   </a>
   <nav aria-label="Seções">
     <ul>
-      <li><a href="#sobre">Sobre</a></li>
-      <li><a href="#atendimento">Atendimento</a></li>
-      <li><a href="#primeiro-contato">Primeiro contato</a></li>
-      <li><a href="#local">Como chegar</a></li>
+      <li><a href="#sobre">A clínica</a></li>
+      <li><a href="#tratamentos">Tratamentos</a></li>
+      <li><a href="#experiencia">Experiência</a></li>
+      <li><a href="#duvidas">Dúvidas</a></li>
+      <li><a href="#contato">Contato</a></li>
     </ul>
   </nav>
   <a class="btn btn-sm js-whats" href="#">Agendar</a>
@@ -67,137 +72,216 @@
 
 <main id="conteudo">
 
-<section class="stage" aria-labelledby="hero-title">
-  <div class="stage-text">
-    <p class="stage-kicker reveal-hero" style="--d:0"><span>Dra. Pâmela Andrade</span> Cirurgiã-dentista · Juiz de Fora</p>
-    <h1 id="hero-title" class="reveal-hero" style="--d:1">
-      Seu sorriso merece <em>atenção</em> desde a primeira conversa.
-    </h1>
-    <p class="lead reveal-hero" style="--d:2">
-      Antes de qualquer tratamento, vem a escuta. Conte o que te incomoda — a gente começa por aí.
-    </p>
-    <div class="stage-cta reveal-hero" style="--d:3">
-      <a class="btn js-whats" href="#">
-        <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.7 11.7 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
-        Agendar uma avaliação
+<!-- 1 · HERO -->
+<section class="hero" id="inicio" aria-labelledby="hero-title">
+  <p class="hero-ghost" aria-hidden="true" data-speed="0.6">Bem&#8209;Estar</p>
+
+  <div class="hero-copy">
+    <p class="eyebrow hero-in">Odontologia em Juiz de Fora</p>
+    <h1 id="hero-title" class="display" data-split>Sorrir também é <em>bem&#8209;estar<svg class="smile-line" viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 80 40, 220 40, 296 8"/></svg></em>.</h1>
+    <p class="lead hero-in">Implante, protocolo, aparelho, prótese, canal e facetas no mesmo consultório — com cada etapa explicada antes de começar.</p>
+    <div class="cta-row hero-in">
+      <a class="btn btn-dark js-whats magnetic" href="#">
+        <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.7 11.7 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
+        Agendar avaliação
       </a>
-      <a class="link-arrow" href="#primeiro-contato">Como funciona</a>
+      <a class="link-arrow" href="#tratamentos">Ver tratamentos</a>
     </div>
-    <dl class="stage-meta reveal-hero" style="--d:4">
-      <div><dt>Onde</dt><dd>Rua Chácara, 292 · Santa Luzia</dd></div>
-      <div><dt>Registro</dt><dd>CRO-MG 44621</dd></div>
-    </dl>
   </div>
-  <figure class="stage-photo reveal-hero" style="--d:1">
-    <!-- PENDENTE: substituir por foto em alta resolução (mín. 1600px, vertical) da Dra. Pâmela ou do consultório. Atual: foto pública do Linktree, 600×600. -->
-    <img src="assets/dra-pamela-linktree.jpg" alt="Dra. Pâmela Andrade, sorrindo, de cabelos cacheados e blusa vermelha" width="600" height="600" fetchpriority="high">
-    <div class="bubble" aria-hidden="true"><span class="typed" data-text="Oi, Dra. Pâmela! Queria marcar uma avaliação 🙂">Oi, Dra. Pâmela! Queria marcar uma avaliação 🙂</span><span class="caret"></span></div>
+
+  <figure class="hero-photo hero-in" data-speed="0.9">
+    <div class="arch"><img src="assets/dra-pamela-linktree.jpg" alt="Dra. Pâmela Andrade, cirurgiã-dentista, sorrindo" width="600" height="600" fetchpriority="high"></div>
+    <figcaption><strong>Dra. Pâmela Andrade</strong> Cirurgiã-dentista · CRO-MG 44621</figcaption>
   </figure>
+
+  <div class="seal hero-in" aria-label="Há mais de 10 anos cuidando de sorrisos">
+    <svg viewBox="0 0 120 120" aria-hidden="true">
+      <defs><path id="seal-circle" d="M60 60 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0"/></defs>
+      <text><textPath href="#seal-circle">cuidando de sorrisos · cuidando de sorrisos ·</textPath></text>
+    </svg>
+    <span>+10<small>anos</small></span>
+  </div>
+
+  <svg class="tooth-fallback" viewBox="0 0 200 240" aria-hidden="true">
+    <defs>
+      <radialGradient id="tf-g" cx="38%" cy="28%" r="80%"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#efe8dc"/><stop offset="1" stop-color="#c9bba6"/></radialGradient>
+    </defs>
+    <path d="M58 22c-26 0-40 20-40 46 0 30 12 44 18 76 5 30 10 74 28 74 14 0 14-30 20-52 4-14 8-20 16-20s12 6 16 20c6 22 6 52 20 52 18 0 23-44 28-74 6-32 18-46 18-76 0-26-14-46-40-46-18 0-28 10-42 10s-24-10-42-10Z" fill="url(#tf-g)"/>
+    <ellipse cx="70" cy="58" rx="18" ry="10" fill="#fff" opacity=".8"/>
+  </svg>
+
+  <a class="scroll-cue" href="#sobre"><span>Role para explorar</span><i aria-hidden="true"></i></a>
 </section>
 
-<div class="marquee" aria-hidden="true">
-  <div class="marquee-track">
-    <span>Escuta antes do tratamento</span><i>✦</i><span>Explicação sem pressa</span><i>✦</i><span>Ortodontia</span><i>✦</i><span>Tratamento de canal</span><i>✦</i><span>Estética e clareamento</span><i>✦</i>
-    <span>Escuta antes do tratamento</span><i>✦</i><span>Explicação sem pressa</span><i>✦</i><span>Ortodontia</span><i>✦</i><span>Tratamento de canal</span><i>✦</i><span>Estética e clareamento</span><i>✦</i>
+<div class="ribbon" aria-hidden="true">
+  <div class="ribbon-track">
+    <span>Implante</span><b></b><span>Protocolo</span><b></b><span>Aparelho</span><b></b><span>Prótese</span><b></b><span>Canal</span><b></b><span>Facetas</span><b></b>
+    <span>Implante</span><b></b><span>Protocolo</span><b></b><span>Aparelho</span><b></b><span>Prótese</span><b></b><span>Canal</span><b></b><span>Facetas</span><b></b>
   </div>
 </div>
 
-<section class="intro" id="sobre" aria-labelledby="sobre-title">
-  <figure class="intro-photo reveal">
+<!-- 2 · SOBRE -->
+<section class="about" id="sobre" aria-labelledby="sobre-title" data-tooth="about">
+  <figure class="about-photo" data-reveal-img>
     <img src="assets/fotos/espelho-sonda.jpg" alt="Espelho clínico e sonda odontológica sobre superfície clara" width="900" height="1200" loading="lazy">
     <figcaption>Imagem ilustrativa</figcaption>
   </figure>
-  <div class="intro-text">
-    <h2 id="sobre-title" class="reveal">Um consultório onde a explicação faz parte do&nbsp;tratamento.</h2>
-    <p class="reveal">
-      Pâmela Andrade é cirurgiã-dentista e atende em Juiz de Fora, na Rua Chácara, bairro Santa Luzia.
-      Quem passa por lá costuma lembrar de duas coisas: a atenção no atendimento e o cuidado em explicar
-      cada etapa — principalmente no tratamento ortodôntico.
-    </p>
-    <p class="reveal">Aqui, entender o que vai ser feito no seu sorriso não é detalhe. É o começo.</p>
-    <!-- PENDENTE: titulação, formação e tempo de atuação SOMENTE após confirmação da Dra. Pâmela. -->
-    <p class="signature reveal"><span>Dra. Pâmela Andrade</span> CRO-MG 44621</p>
+  <div class="about-text">
+    <p class="eyebrow">A clínica</p>
+    <h2 id="sobre-title" class="display depth" data-split>Mais de dez anos de sorrisos em <em>Juiz de Fora</em>.</h2>
+    <p data-fade>A Bem-Estar Odontologia nasceu de uma ideia simples: ir ao dentista não precisa ser motivo de tensão. Por isso, a conversa vem antes do procedimento — você entende o que está acontecendo com o seu sorriso e quais são os caminhos possíveis.</p>
+    <p data-fade>Do aparelho ao implante, do canal às facetas, o cuidado acontece no mesmo lugar, com o mesmo olhar atento.</p>
+    <dl class="facts" data-fade>
+      <div><dt>+10</dt><dd>anos cuidando de sorrisos</dd></div>
+      <div><dt>6</dt><dd>frentes de tratamento</dd></div>
+    </dl>
   </div>
 </section>
 
-<section class="care" id="atendimento" aria-labelledby="servicos-title">
-  <div class="care-aside">
-    <h2 id="servicos-title" class="reveal">O que dá para cuidar por aqui</h2>
-    <p class="reveal">Toque em cada área para entender, em poucas palavras, do que se trata. A indicação de qualquer tratamento depende sempre da avaliação.</p>
-    <img class="care-brush reveal" src="assets/fotos/escova-recortada.png" alt="" width="104" height="961" loading="lazy">
+<!-- 3 · TRATAMENTOS -->
+<section class="care" id="tratamentos" aria-labelledby="trat-title" data-tooth="care">
+  <div class="care-head">
+    <p class="eyebrow">Tratamentos</p>
+    <h2 id="trat-title" class="display depth" data-split>Tudo o que o seu sorriso pede, <em>num só lugar</em>.</h2>
+    <p data-fade>A indicação de cada tratamento depende sempre de uma avaliação individual. Passe o cursor — ou toque — para conhecer cada um.</p>
   </div>
-  <!-- PENDENTE: confirmar a lista de serviços e como apresentá-los (fonte: Linktree). -->
-  <div class="care-list">
-    <details class="care-item reveal" open>
-      <summary><span class="care-name">Ortodontia</span><span class="care-hint">alinhamento e mordida</span><span class="plus" aria-hidden="true"></span></summary>
-      <div class="care-body">
-        <p>Cuida da posição dos dentes e de como eles se encaixam ao morder. Na avaliação, a dentista examina o caso e explica quais caminhos fazem sentido para você.</p>
-        <p class="ask">Pergunta para levar: “Como seria o acompanhamento no meu caso?”</p>
-      </div>
+  <ol class="care-grid">
+    <li class="card glint" tabindex="0">
+      <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M14 8c-5 0-8 4-8 9 0 6 3 8 4 13M34 8c5 0 8 4 8 9 0 6-3 8-4 13M14 8c3 0 6 2 10 2s7-2 10-2M10 30h28M18 30v4l2 2v4l2 2v4M30 30v4l-2 2v4l-2 2v4"/></svg>
+      <h3>Implante</h3>
+      <p>Um pino de titânio substitui a raiz de um dente perdido e serve de base para a nova coroa.</p>
+    </li>
+    <li class="card glint" tabindex="0">
+      <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 20c6-8 30-8 36 0M8 20c2 4 6 6 16 6s14-2 16-6M14 26v12M24 27v13M34 26v12"/></svg>
+      <h3>Protocolo</h3>
+      <p>Prótese fixa sobre implantes para quem perdeu os dentes de uma arcada inteira.</p>
+    </li>
+    <li class="card glint" tabindex="0">
+      <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M4 24c6 6 34 6 40 0M9 20h6v8H9zM21 21h6v8h-6zM33 20h6v8h-6zM6 24h36"/></svg>
+      <h3>Aparelho</h3>
+      <p>Ortodontia para corrigir a posição dos dentes e o encaixe da mordida, com acompanhamento a cada etapa.</p>
+    </li>
+    <li class="card glint" tabindex="0">
+      <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M8 18c4-4 8-4 10 0 2-4 8-4 12 0 2-4 8-4 10 0M8 18c0 8 2 12 4 18M40 18c0 8-2 12-4 18M18 18c0 8 0 12 2 18M30 18c0 8 0 12-2 18"/></svg>
+      <h3>Prótese</h3>
+      <p>Coroas, pontes e próteses que repõem dentes perdidos e devolvem função à mastigação.</p>
+    </li>
+    <li class="card glint" tabindex="0">
+      <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M16 6c-5 0-8 4-8 9 0 7 4 9 5 16 1 5 2 11 5 11 2 0 2-5 3-9 .6-2 1.4-3 3-3s2.4 1 3 3c1 4 1 9 3 9 3 0 4-6 5-11 1-7 5-9 5-16 0-5-3-9-8-9-4 0-6 2-8 2s-4-2-8-2ZM20 16v12M28 16v12"/></svg>
+      <h3>Canal</h3>
+      <p>Trata a parte interna do dente quando ela está inflamada ou infeccionada, buscando preservá-lo.</p>
+    </li>
+    <li class="card glint" tabindex="0">
+      <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M12 10h24v16c0 8-5 14-12 14s-12-6-12-14zM18 10v24M30 10v24M8 6l4 4M40 6l-4 4M24 2v4"/></svg>
+      <h3>Facetas e estética</h3>
+      <p>Lâminas finas sobre a face visível dos dentes para harmonizar forma e cor, após avaliar a saúde bucal.</p>
+    </li>
+  </ol>
+</section>
+
+<!-- 4 · EXPERIÊNCIA -->
+<section class="experience" id="experiencia" aria-labelledby="exp-title" data-tooth="experience">
+  <svg class="arc" viewBox="0 0 1200 600" preserveAspectRatio="none" aria-hidden="true">
+    <path class="arc-path" d="M40 120 C 260 560, 940 560, 1160 120"/>
+    <path class="arc-path arc-2" d="M140 90 C 330 470, 870 470, 1060 90"/>
+  </svg>
+  <div class="experience-inner">
+    <p class="eyebrow">A experiência</p>
+    <h2 id="exp-title" class="display mega depth" data-split>Entender cada passo <em>faz parte</em> do cuidado.</h2>
+  </div>
+  <ol class="pillars">
+    <li data-fade><span>Escuta</span><p>A primeira consulta começa pelo que você sente e pelo que te incomoda.</p></li>
+    <li data-fade><span>Explicação</span><p>Antes de qualquer procedimento, você entende o diagnóstico e as opções.</p></li>
+    <li data-fade><span>Acompanhamento</span><p>Do planejamento à última sessão, com o mesmo consultório ao seu lado.</p></li>
+  </ol>
+</section>
+
+<!-- 5 · DETALHES / GALERIA -->
+<section class="details" aria-label="Detalhes do cuidado">
+  <figure class="d1" data-reveal-img data-speed="0.92"><img src="assets/fotos/cadeira-laranja.jpg" alt="Cadeira odontológica em consultório" width="1400" height="933" loading="lazy"></figure>
+  <figure class="d2" data-reveal-img data-speed="1.08"><img src="assets/fotos/escova-madeira.jpg" alt="Escova de dentes de madeira" width="900" height="1200" loading="lazy"></figure>
+  <p class="details-quote depth" data-fade>“Um sorriso cuidado é um sorriso tranquilo.”</p>
+  <p class="details-note">Imagens ilustrativas. Veja o consultório real no <a href="https://www.instagram.com/bemestarodontologiajf/" target="_blank" rel="noopener">Instagram da clínica</a>.</p>
+</section>
+
+<!-- 6 · EQUIPE -->
+<section class="team" id="equipe" aria-labelledby="equipe-title" data-tooth="team">
+  <figure class="team-photo" data-reveal-img>
+    <img src="assets/dra-pamela-linktree.jpg" alt="Retrato da Dra. Pâmela Andrade" width="600" height="600" loading="lazy">
+  </figure>
+  <div class="team-text">
+    <p class="eyebrow">Quem cuida de você</p>
+    <h2 id="equipe-title" class="display depth" data-split>Dra. Pâmela <em>Andrade</em></h2>
+    <p class="team-role" data-fade>Cirurgiã-dentista · CRO-MG 44621</p>
+    <p data-fade>Atendimento atento, sem pressa, e o cuidado de explicar cada etapa — principalmente no tratamento ortodôntico. É o que os pacientes costumam lembrar.</p>
+    <a class="link-arrow" href="https://www.instagram.com/bemestarodontologiajf/" target="_blank" rel="noopener" data-fade>Relatos de pacientes no Instagram <span class="sr-only">(abre em nova aba)</span></a>
+  </div>
+</section>
+
+<!-- 7 · FAQ -->
+<section class="faq" id="duvidas" aria-labelledby="faq-title" data-tooth="faq">
+  <h2 id="faq-title" class="display" data-split>Dúvidas <em>frequentes</em></h2>
+  <div class="faq-list">
+    <details>
+      <summary>Como faço para agendar?</summary>
+      <p>Pelo WhatsApp (32) 98402-1717. É só mandar uma mensagem contando o que você precisa que o horário é combinado com você.</p>
     </details>
-    <details class="care-item reveal">
-      <summary><span class="care-name">Tratamento de canal</span><span class="care-hint">a parte de dentro do dente</span><span class="plus" aria-hidden="true"></span></summary>
-      <div class="care-body">
-        <p>Feito quando a parte interna do dente está inflamada ou infeccionada. O objetivo é tratar a causa do problema e preservar o dente sempre que possível.</p>
-        <p class="ask">Pergunta para levar: “O que acontece em cada sessão?”</p>
-      </div>
+    <details>
+      <summary>Como funciona a primeira consulta?</summary>
+      <p>Tudo começa por uma avaliação: o caso é examinado, conversado e as possibilidades de tratamento são explicadas. Traga suas dúvidas — elas fazem parte da consulta.</p>
     </details>
-    <details class="care-item reveal">
-      <summary><span class="care-name">Estética e clareamento</span><span class="care-hint">aparência do sorriso</span><span class="plus" aria-hidden="true"></span></summary>
-      <div class="care-body">
-        <p>Procedimentos voltados à aparência do sorriso, como o clareamento. Antes de qualquer indicação, é preciso avaliar a saúde dos dentes e das gengivas.</p>
-        <p class="ask">Pergunta para levar: “Meus dentes estão prontos para clarear?”</p>
-      </div>
+    <details>
+      <summary>Quais tratamentos a clínica oferece?</summary>
+      <p>Implante, protocolo, aparelho ortodôntico, prótese, tratamento de canal, facetas e estética. A indicação de cada um depende da avaliação.</p>
+    </details>
+    <details>
+      <summary>Perdi um dente. Implante ou prótese?</summary>
+      <p>Depende de fatores como a saúde da gengiva, a quantidade de osso e as suas necessidades. Só a avaliação clínica permite indicar o melhor caminho.</p>
+    </details>
+    <details>
+      <summary>Quais são os horários de atendimento?</summary>
+      <p>Os horários são combinados diretamente pelo WhatsApp, de acordo com a agenda disponível.</p>
     </details>
   </div>
 </section>
 
-<section class="path" id="primeiro-contato" aria-labelledby="passos-title">
-  <h2 id="passos-title" class="sr-only">Como funciona o primeiro contato</h2>
-  <p class="path-sentence reveal">
-    Você <mark>manda uma mensagem</mark> contando o que sente,
-    o consultório <mark>combina o horário</mark> com você,
-    e na avaliação a Dra. Pâmela <mark>examina, conversa e explica</mark> as possibilidades
-    — com espaço para todas as suas perguntas.
-  </p>
-  <a class="link-arrow reveal js-whats" href="#">Começar pela mensagem</a>
-</section>
-
-<section class="place" id="local" aria-labelledby="local-title">
-  <div class="place-map reveal">
-    <iframe title="Mapa: Rua Chácara, 292, Santa Luzia, Juiz de Fora" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-      src="https://www.google.com/maps?q=Rua+Ch%C3%A1cara,+292,+Santa+Luzia,+Juiz+de+Fora+-+MG&output=embed"></iframe>
+<!-- 8 · AGENDAMENTO + LOCAL -->
+<section class="contact" id="contato" aria-labelledby="contato-title" data-tooth="contact">
+  <div class="contact-cta">
+    <p class="eyebrow">Agendamento</p>
+    <h2 id="contato-title" class="display mega" data-split>Vamos cuidar do <em>seu sorriso</em>?</h2>
+    <p data-fade>Mande uma mensagem e agende sua avaliação.</p>
+    <a class="btn btn-light btn-lg js-whats magnetic" href="#">Conversar pelo WhatsApp</a>
   </div>
-  <div class="place-card reveal">
-    <h2 id="local-title">Rua Chácara, 292</h2>
-    <address>Santa Luzia · Juiz de Fora/MG</address>
-    <!-- PENDENTE: horário de atendimento (não informado). -->
-    <div class="place-actions">
-      <a class="btn" href="https://www.google.com/maps/dir/?api=1&destination=Rua+Ch%C3%A1cara%2C+292%2C+Santa+Luzia%2C+Juiz+de+Fora+-+MG" target="_blank" rel="noopener">Traçar rota <span class="sr-only">(abre o Google Maps em nova aba)</span></a>
-      <a class="link-arrow" href="tel:+5532984021717">(32) 98402-1717</a>
+  <div class="contact-place">
+    <div class="map" data-reveal-img>
+      <iframe title="Mapa: Rua Chácara, 292, Santa Luzia, Juiz de Fora" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        src="https://www.google.com/maps?q=Rua+Ch%C3%A1cara,+292,+Santa+Luzia,+Juiz+de+Fora+-+MG&output=embed"></iframe>
+    </div>
+    <div class="place-info">
+      <h3>Rua Chácara, 292</h3>
+      <address>Santa Luzia · Juiz de Fora/MG</address>
+      <p><a href="tel:+5532984021717">(32) 98402-1717</a></p>
+      <a class="link-arrow" href="https://www.google.com/maps/dir/?api=1&destination=Rua+Ch%C3%A1cara%2C+292%2C+Santa+Luzia%2C+Juiz+de+Fora+-+MG" target="_blank" rel="noopener">Traçar rota <span class="sr-only">(abre o Google Maps em nova aba)</span></a>
     </div>
   </div>
-</section>
-
-<section class="closing" aria-labelledby="fim-title">
-  <img class="closing-bg" src="assets/fotos/cadeira-laranja.jpg" alt="" loading="lazy" width="1400" height="933">
-  <!-- PENDENTE: imagem ilustrativa (Unsplash). Substituir por foto real do consultório. -->
-  <h2 id="fim-title" class="reveal">Vamos conversar sobre o seu sorriso?</h2>
-  <p class="reveal">Mande uma mensagem e agende sua avaliação.</p>
-  <a class="btn btn-light reveal js-whats" href="#">Conversar pelo WhatsApp</a>
 </section>
 
 </main>
 
 <footer class="footer">
-  <p><strong>Dra. Pâmela Andrade</strong> · Cirurgiã-dentista · CRO-MG 44621</p>
-  <p>Rua Chácara, 292, Santa Luzia, Juiz de Fora/MG · <a href="https://www.instagram.com/drapamelaandrade/" target="_blank" rel="noopener">@drapamelaandrade</a></p>
+  <div class="footer-brand">Bem-Estar <em>Odontologia</em></div>
+  <p>Rua Chácara, 292, Santa Luzia, Juiz de Fora/MG · <a href="tel:+5532984021717">(32) 98402-1717</a> · <a href="https://www.instagram.com/bemestarodontologiajf/" target="_blank" rel="noopener">@bemestarodontologiajf</a></p>
+  <p class="footer-legal">Dra. Pâmela Andrade · Cirurgiã-dentista · CRO-MG 44621</p>
 </footer>
 
 <a class="float-whats js-whats" href="#" aria-label="Agendar pelo WhatsApp">
   <svg aria-hidden="true" viewBox="0 0 24 24" width="26" height="26"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.7 11.7 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
 </a>
 
+<script src="vendor/gsap.min.js" defer></script>
+<script src="vendor/ScrollTrigger.min.js" defer></script>
 <script src="script.js" defer></script>
+<script type="module" src="tooth.js"></script>
 </body>
 </html>
