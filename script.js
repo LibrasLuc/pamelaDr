@@ -66,9 +66,9 @@ if (!reduce && window.gsap && window.ScrollTrigger) {
 
   // Entrada do hero
   gsap.from(".hero-in", { y: 30, opacity: 0, duration: 1.2, ease: "power3.out", stagger: 0.12, delay: 0.6 });
-  gsap.from(".halo", { scale: 0.6, opacity: 0, duration: 2, ease: "expo.out", delay: 0.3 });
-  gsap.from(".smile-line path", { strokeDashoffset: 320, duration: 1.4, ease: "power2.inOut", delay: 1.4 });
-  gsap.from(".hero-ghost", { xPercent: -8, opacity: 0, duration: 2.4, ease: "expo.out" });
+  gsap.from(".hero-main-photo", { clipPath: "inset(100% 0 0 0 round 180px 18px 18px 18px)", duration: 1.55, ease: "expo.inOut", delay: 0.2 });
+  gsap.from(".hero-main-photo img", { scale: 1.16, duration: 2, ease: "expo.out", delay: 0.2 });
+  gsap.from([".hero-side-photo", ".hero-year", ".hero-visual figcaption"], { y: 24, opacity: 0, duration: 1, ease: "power3.out", stagger: .12, delay: .9 });
 
   // Fades suaves
   gsap.utils.toArray("[data-fade]").forEach((el) => {

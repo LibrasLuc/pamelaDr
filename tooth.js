@@ -2,7 +2,7 @@
 // Sem WebGL ou com movimento reduzido, o hero mostra o dente em SVG (.tooth-fallback).
 import * as THREE from "three";
 import { RoomEnvironment } from "three/addons/RoomEnvironment.js";
-import { mergeVertices } from "three/addons/BufferGeometryUtils.js";
+import { MarchingCubes } from "three/addons/MarchingCubes.js";
 
 const root = document.documentElement;
 const canvas = document.querySelector(".tooth-canvas");
@@ -19,77 +19,74 @@ if (!canvas || reduce || !hasWebGL() || !window.gsap) root.classList.add("no-3d"
 // fora do caminho crítico: não segura o primeiro render
 else setTimeout(init, 0);
 
-// Molar procedural: coroa com 4 cúspides + duas raízes (mesial e distal)
-function crownGeometry() {
-  let g = new THREE.SphereGeometry(1, 160, 120);
-  g.deleteAttribute("normal");
-  g.deleteAttribute("uv");
-  g = mergeVertices(g);
-  const p = g.attributes.position;
-  const v = new THREE.Vector3();
-  const cusps = [[0.42, 0.38], [-0.42, 0.38], [0.42, -0.38], [-0.42, -0.38]];
-  for (let i = 0; i < p.count; i++) {
-    v.fromBufferAttribute(p, i);
-    let { x, y, z } = v;
-    const r = Math.hypot(x, z) || 1e-6;
-    const ang = Math.atan2(z, x);
-    // seção levemente quadrada
-    const sq = 1 / Math.pow(Math.abs(Math.cos(ang)) ** 4 + Math.abs(Math.sin(ang)) ** 4, 0.25);
-    const k = 0.82 + 0.18 * sq;
-    if (y >= 0) {
-      const rr = Math.pow(r, 0.55); // achata o topo
-      x = (x / r) * rr * k * 1.0;
-      z = (z / r) * rr * k * 0.9;
-      let bump = 0;
-      for (const [cx, cz] of cusps) bump += Math.exp(-((x - cx) ** 2 + (z - cz) ** 2) / 0.1);
-      const groove = Math.exp(-(x * x) / 0.01) * 0.7 + Math.exp(-(z * z) / 0.014) * 0.35;
-      y = 0.32 + 0.5 * y + y * y * (0.3 * bump - 0.16 * groove);
-    } else {
-      // colo: estreita suavemente e fecha por dentro das raízes
-      const t = -y;
-      x *= (1 - 0.42 * t) * k * 1.0;
-      z *= (1 - 0.42 * t) * k * 0.9;
-      y = 0.32 - 0.62 * t;
+// Molar estilizado em peça única: campo de distância (coroa, cúspides, colo e
+// três raízes fundidos com união suave) poligonizado por marching cubes.
+const smin = (a, b, k) => { const h = Math.max(k - Math.abs(a - b), 0) / k; return Math.min(a, b) - h * h * k * 0.25; };
+const smax = (a, b, k) => -smin(-a, -b, k);
+const len3 = (x, y, z) => Math.sqrt(x * x + y * y + z * z);
+
+function sdRoundBox(x, y, z, bx, by, bz, r) {
+  const qx = Math.abs(x) - bx + r, qy = Math.abs(y) - by + r, qz = Math.abs(z) - bz + r;
+  return len3(Math.max(qx, 0), Math.max(qy, 0), Math.max(qz, 0)) + Math.min(Math.max(qx, qy, qz), 0) - r;
+}
+
+// Cone de pontas arredondadas (Inigo Quilez)
+function sdRoundCone(px, py, pz, a, b, r1, r2) {
+  const bax = b[0] - a[0], bay = b[1] - a[1], baz = b[2] - a[2];
+  const l2 = bax * bax + bay * bay + baz * baz;
+  const rr = r1 - r2, a2 = l2 - rr * rr, il2 = 1 / l2;
+  const pax = px - a[0], pay = py - a[1], paz = pz - a[2];
+  const y = pax * bax + pay * bay + paz * baz, z = y - l2;
+  const cx = pax * l2 - bax * y, cy = pay * l2 - bay * y, cz = paz * l2 - baz * y;
+  const x2 = cx * cx + cy * cy + cz * cz, y2 = y * y * l2, z2 = z * z * l2;
+  const k = Math.sign(rr) * rr * rr * x2;
+  if (Math.sign(z) * a2 * z2 > k) return Math.sqrt(x2 + z2) * il2 - r2;
+  if (Math.sign(y) * a2 * y2 < k) return Math.sqrt(x2 + y2) * il2 - r1;
+  return (Math.sqrt(x2 * a2 * il2) + y * rr) * il2 - r1;
+}
+
+const CUSPS = [[-0.3, 0.2], [0.3, 0.2], [-0.3, -0.2], [0.3, -0.2]];
+const ROOTS = [
+  { a: [-0.34, -0.05, 0.14], b: [-0.5, -1.18, 0.2], r1: 0.3, r2: 0.13 },
+  { a: [0.34, -0.05, 0.14], b: [0.48, -1.12, 0.22], r1: 0.3, r2: 0.13 },
+  { a: [0, -0.05, -0.22], b: [0.04, -1.0, -0.38], r1: 0.27, r2: 0.12 },
+];
+
+function toothSDF(x, y, z) {
+  // coroa: bloco arredondado, mais largo que o colo
+  let d = sdRoundBox(x, y - 0.42, z, 0.66, 0.38, 0.54, 0.42);
+  // cúspides suaves no topo
+  for (const [cx, cz] of CUSPS) d = smin(d, len3(x - cx, y - 0.6, z - cz) - 0.3, 0.22);
+  // fossa central e sulcos entre cúspides
+  d = smax(d, -(len3(x, y - 1.06, z) - 0.3), 0.14);
+  d = smax(d, -(Math.hypot(x, y - 0.98) - 0.12), 0.1);
+  // colo: estreitamento cervical
+  d = smin(d, sdRoundCone(x, y, z, [0, 0.2, 0], [0, -0.2, 0], 0.56, 0.5), 0.3);
+  // raízes com leve curvatura distal
+  const bx = x - 0.06 * Math.max(-y, 0) ** 2;
+  for (const r of ROOTS) d = smin(d, sdRoundCone(bx, y, z, r.a, r.b, r.r1, r.r2), 0.28);
+  return d;
+}
+
+function buildTooth(material, res) {
+  const S = 1.42; // domínio [-S, S] em cada eixo
+  const mc = new MarchingCubes(res, material, false, false, 160000);
+  const f = mc.field, n = mc.size, h = mc.halfsize, oy = -0.08;
+  for (let k = 0; k < n; k++) {
+    const z = ((k - h) / h) * S;
+    for (let j = 0; j < n; j++) {
+      const y = ((j - h) / h) * S + oy;
+      for (let i = 0; i < n; i++) {
+        const x = ((i - h) / h) * S;
+        f[k * n * n + j * n + i] = -toothSDF(x, y, z);
+      }
     }
-    p.setXYZ(i, x, y, z);
   }
-  g.computeVertexNormals();
-  return g;
-}
-
-// Raiz cônica com ápice arredondado e leve curvatura distal
-function rootGeometry(len, side) {
-  const pts = [];
-  const N = 48;
-  for (let i = 0; i <= N; i++) {
-    const u = i / N;
-    const r = 0.48 * Math.sqrt(1 - Math.pow(u, 2.4)) * (1 - 0.6 * u);
-    pts.push(new THREE.Vector2(Math.max(r, 0.0001), -u * len));
-  }
-  const g = new THREE.LatheGeometry(pts, 56);
-  const p = g.attributes.position;
-  for (let i = 0; i < p.count; i++) {
-    const u = -p.getY(i) / len;
-    // raízes de molar: estreitas no sentido mesio-distal, largas no vestíbulo-lingual
-    const x = p.getX(i) * 0.7 + side * (0.32 + 0.16 * u) + 0.2 * u * u;
-    p.setXYZ(i, x, p.getY(i) - 0.05, p.getZ(i) * 1.02);
-  }
-  g.computeVertexNormals();
-  return g;
-}
-
-function buildTooth(material) {
-  const group = new THREE.Group();
-  group.add(
-    new THREE.Mesh(crownGeometry(), material),
-    new THREE.Mesh(rootGeometry(1.75, -1), material),
-    new THREE.Mesh(rootGeometry(1.6, 1), material)
-  );
-  const box = new THREE.Box3().setFromObject(group);
-  const c = box.getCenter(new THREE.Vector3());
-  group.children.forEach((m) => m.position.sub(c));
-  group.scale.setScalar(0.62);
-  return group;
+  mc.isolation = 0;
+  mc.update();
+  mc.scale.setScalar(S * 0.62);
+  mc.position.y = oy * 0.62;
+  return mc;
 }
 
 function init() {
@@ -119,14 +116,14 @@ function init() {
     ior: 1.55,
     specularIntensity: 0.9,
   });
-  const tooth = buildTooth(material);
+  const tooth = buildTooth(material, isMobile ? 64 : 88);
   const pivot = new THREE.Group();
   pivot.add(tooth);
   scene.add(pivot);
 
   const key = new THREE.DirectionalLight(0xfff4e6, 2.2);
   key.position.set(3, 4, 5);
-  const rim = new THREE.DirectionalLight(0x9fd0c4, 1.8);
+  const rim = new THREE.DirectionalLight(0xb9c6ff, 1.6);
   rim.position.set(-4, 1, -3);
   const glint = new THREE.PointLight(0xffffff, 6, 12);
   glint.position.set(1, 1, 4);
@@ -140,7 +137,7 @@ function init() {
 
   // Coreografia por seção: desktop / mobile
   const D = {
-    hero:       { x: 0.5,   y: -0.04, s: 1.3,  rx: 0.2,  ry: 0.5,  rz: -0.18, op: 1 },
+    hero:       { x: 0.03,  y: -0.4,  s: 0.72, rx: 0.2,  ry: 0.5,  rz: -0.18, op: 1 },
     about:      { x: 0.8,   y: 0.12,  s: 0.7,  rx: -0.2, ry: 2.6,  rz: 0.2,   op: 1 },
     care:       { x: -0.66, y: -0.42, s: 0.72, rx: 0.3,  ry: 4.6,  rz: -0.1,  op: 1 },
     experience: { x: 0,     y: 0.08,  s: 1.3,  rx: 0.15, ry: 7,    rz: 0,     op: 0.92 },
@@ -149,8 +146,9 @@ function init() {
     contact:    { x: 0,     y: 0.42,  s: 0.85, rx: 0.2,  ry: 12.6, rz: 0,     op: 1 },
   };
   const M = {
-    hero:       { x: 0,     y: -0.62, s: 0.62, rx: 0.2,  ry: 0.5, rz: -0.18, op: 1 },
+    hero:       { x: 0.55,  y: -0.2,  s: 0.42, rx: 0.2,  ry: 0.5, rz: -0.18, op: 1 },
     about:      { x: 0.7,   y: 0.7,   s: 0.3,  rx: 0,    ry: 3,   rz: 0,    op: 0 },
+    care:       { x: -0.7,  y: 0.2,   s: 0.3,  rx: 0,    ry: 5,   rz: 0,    op: 0 },
     experience: { x: 0,     y: 0.5,   s: 0.5,  rx: 0.1,  ry: 7,   rz: 0,    op: 0.9 },
     team:       { x: 0.8,   y: 0.8,   s: 0.3,  rx: 0,    ry: 9,   rz: 0,    op: 0 },
     contact:    { x: 0,     y: 0.7,   s: 0.38, rx: 0.2,  ry: 12.6, rz: 0,   op: 1 },
@@ -233,14 +231,14 @@ function init() {
       const k = intro.k;
       pivot.position.set(
         state.x * halfW,
-        state.y * halfH + Math.sin(t * 1.1) * 0.06 - (1 - k) * 1.2,
+        state.y * halfH + Math.sin(t * 0.9) * 0.1 - (1 - k) * 1.2,
         0
       );
       pivot.scale.setScalar(state.s * (0.6 + 0.4 * k));
       tooth.rotation.set(
-        state.rx + pointer.y * 0.25,
+        state.rx + pointer.y * 0.25 + Math.sin(t * 0.8) * 0.06,
         state.ry + spin.v + t * 0.18 + pointer.x * 0.4 - (1 - k) * 2,
-        state.rz + Math.sin(t * 0.7) * 0.05
+        state.rz + Math.sin(t * 0.6) * 0.08
       );
       // brilho de porcelana que acompanha o cursor
       glint.position.set(pointer.x * 4, -pointer.y * 3 + 1, 4);
