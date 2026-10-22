@@ -105,10 +105,10 @@ p { margin: 0 0 1em; }
   transition: background .4s, box-shadow .4s, padding .4s;
 }
 .nav.scrolled { background: rgba(244, 239, 231, .86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 1px 0 var(--line); padding-block: 10px; }
-.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--deep); }
-.brand-mark { width: 34px; height: 34px; }
-.brand-name { font-family: var(--serif); font-size: 1.45rem; line-height: 1; }
-.brand-name small { display: block; font-family: var(--sans); font-size: .58rem; letter-spacing: .28em; text-transform: uppercase; color: var(--ink-soft); margin-top: 3px; }
+.brand { display: flex; align-items: center; gap: 10px; flex: none; text-decoration: none; color: var(--deep); }
+.brand-logo { height: 68px; width: auto; }
+.nav.scrolled .brand-logo { height: 56px; }
+@media (max-width: 899px) { .brand-logo, .nav.scrolled .brand-logo { height: 54px; } }
 .nav ul { display: none; list-style: none; margin: 0; padding: 0; gap: 28px; }
 .nav ul a { text-decoration: none; font-size: .92rem; position: relative; padding: 6px 0; }
 .nav ul a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .4s var(--ease); }
@@ -341,8 +341,7 @@ section { position: relative; }
 
 /* Footer */
 .footer { background: var(--ink); color: rgba(244, 239, 231, .7); padding: 48px var(--gutter) 100px; font-size: .9rem; }
-.footer-brand { font-family: var(--serif); font-size: clamp(2.2rem, 5vw, 3.6rem); color: var(--porcelain); margin-bottom: .4em; }
-.footer-brand em { color: var(--gold); }
+.footer-logo { height: clamp(90px, 12vw, 130px); width: auto; margin-bottom: 1.4em; }
 .footer a { color: var(--porcelain); }
 .footer-legal { font-size: .8rem; opacity: .7; }
 
